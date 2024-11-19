@@ -169,7 +169,15 @@ public class Principal {
         int edadMin = scanner.nextInt();
         System.out.print("Introduce la edad máxima del profesor: ");
         int edadMax = scanner.nextInt();
-        profesorDAO.getProfesores(edadMin, edadMax);
+        ArrayList<Profesor> profesores = profesorDAO.getProfesores(edadMin, edadMax);
+        if(profesores == null) {
+            System.out.println("No se ha encontrado ningún alumno con ese email");
+        }
+        else {
+            for(Profesor profesor: profesores) {
+                System.out.println(profesor);
+            }
+        }
     }
 
     private static void actualizarProfesor() {
@@ -179,11 +187,12 @@ public class Principal {
         System.out.print("Introduce la nueva calificacion: ");
         int rating = scanner.nextInt();
         profesorDAO.actualizarProfesor(email, rating);
-
+        System.out.println("Se ha actualizado el profesor");
     }
 
     private static void darBajaAlumnos() {
         System.out.println("Se darán de baja los alumnos con nota superior a 5.");
         alumnoDAO.borrarAlumnosNotaMinima();
+        System.out.println("Se ha realizado la operación");
     }
 }

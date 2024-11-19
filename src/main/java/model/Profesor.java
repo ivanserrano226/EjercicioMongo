@@ -1,9 +1,6 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,6 +9,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
 public class Profesor implements Serializable {
     private double rating;
     private int age;

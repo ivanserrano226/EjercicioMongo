@@ -11,6 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
 public class Alumno implements Serializable {
     private double rating;
     private int age;
