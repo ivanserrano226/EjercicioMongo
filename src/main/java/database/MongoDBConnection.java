@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import model.Alumno;
 import model.Profesor;
 import org.bson.codecs.configuration.CodecProvider;
+import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
@@ -24,21 +25,20 @@ public class MongoDBConnection {
 
     public MongoDBConnection() {
         pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
-        pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
-
-//        pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(),
-//                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+        pojoCodecRegistry = CodecRegistries.fromRegistries(
+                MongoClients.create().getCodecRegistry(),
+                CodecRegistries.fromProviders(pojoCodecProvider)
+        );
         mongoClient = MongoClients.create(String.format(connectionString, DBScheme.USER, DBScheme.PASSWORD));
     }
 
-    public MongoCollection<Alumno> getAlumnosCollection() {
+    public MongoCollection getAlumnosCollection() {
         MongoDatabase database = mongoClient.getDatabase("centro_estudios").withCodecRegistry(pojoCodecRegistry);
-        MongoCollection<Alumno> alumnosCollection = database.getCollection("alumnos", Alumno.class);
-        return alumnosCollection;
+        return database.getCollection("alumnos", Alumno.class);
     }
 
-//    public MongoCollection getProfesoresCollection() {
-//        MongoDatabase database = mongoClient.getDatabase("centro_estudios").withCodecRegistry(pojoCodecRegistry);
-//        return database.getCollection("profesores", Profesor.class);
-//    }
+    public MongoCollection getProfesoresCollection() {
+        MongoDatabase database = mongoClient.getDatabase("centro_estudios").withCodecRegistry(pojoCodecRegistry);
+        return database.getCollection("profesores", Profesor.class);
+    }
 }

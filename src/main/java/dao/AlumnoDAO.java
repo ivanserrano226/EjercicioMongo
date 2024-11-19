@@ -22,22 +22,27 @@ public class AlumnoDAO {
         colleccionAlumnos.insertOne(alumno);
     }
 
-    public ArrayList<Alumno> getAlumnos() {
-        return findAlumnos();
+    public ArrayList<Alumno>  getAlumnos() {
+        return findAlumnos(null);
     }
 
     public ArrayList<Alumno> getAlumnos(String email) {
         Bson filtroEmail = Filters.eq("email", email);
-        return findAlumnos();
+        return findAlumnos(filtroEmail);
     }
 
-    private ArrayList<Alumno> findAlumnos() {
+    private ArrayList<Alumno>  findAlumnos(Bson filtro) {
 
         ArrayList<Alumno> alumnos = new ArrayList<>();
 
         FindIterable<Alumno> resultado;
 
-        resultado = colleccionAlumnos.find();
+        if(filtro == null) {
+            resultado = colleccionAlumnos.find();
+        }
+        else {
+            resultado = colleccionAlumnos.find(filtro);
+        }
 
         MongoCursor<Alumno> cursor = resultado.cursor();
         while(cursor.hasNext()) {

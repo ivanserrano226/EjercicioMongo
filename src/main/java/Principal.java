@@ -101,9 +101,8 @@ public class Principal {
         System.out.print("Introduce el título del nuevo profesor: ");
         String titulo = scanner.next();
 
-        //Profesor nuevoProfesor = new Profesor(nombre, genero, edad, rating, email, phone, subjects, titulo);
-        //profesorDAO.insertarProfesores(nuevoProfesor);
-
+        Profesor nuevoProfesor = new Profesor(rating, edad, nombre, genero, email, phone, subjects, titulo);
+        profesorDAO.insertarProfesores(nuevoProfesor);
     }
 
     private static void insertarAlumno() {
@@ -123,48 +122,45 @@ public class Principal {
         String phone = scanner.next();
         System.out.print("Introduce el grado superior del nuevo alumno: ");
         String higher_grade = scanner.next();
-        System.out.print("Introduce si el nuevo alumno puede o no realizar las FCTs (True o False): ");
-        boolean fcts = scanner.nextBoolean();
 
-        Alumno nuevoAlumno = new Alumno(nombre, genero, edad, rating, calificacion, email, phone, higher_grade, fcts);
+        Alumno nuevoAlumno = new Alumno(rating, edad, nombre, genero, email, phone, calificacion, higher_grade);
         alumnoDAO.insertarAlumnos(nuevoAlumno);
     }
 
     private static void mostrarDatos() {
         System.out.println("Alumnos: ");
-        ArrayList<Alumno> todos = alumnoDAO.getAlumnos();
-        for(Alumno alumno: todos) {
-            System.out.println(alumno);
-        }
+        mostrarAlumnos();
         System.out.println("Profesores: ");
+        mostrarProfesores();
     }
 
     private static void mostrarProfesores() {
-        ArrayList<Alumno> todos = alumnoDAO.getAlumnos();
-        for(Alumno alumno: todos) {
-            System.out.println(alumno);
+        ArrayList<Profesor> todos = profesorDAO.getProfesores();
+        for(Profesor profesor: todos) {
+            System.out.println(profesor);
         }
+        alumnoDAO.getAlumnos();
     }
 
     private static void mostrarAlumnos() {
         ArrayList<Alumno> todos = alumnoDAO.getAlumnos();
-//        for(Alumno alumno: todos) {
-//            System.out.println(alumno);
-//        }
+        alumnoDAO.getAlumnos();
+        for(Alumno alumno: todos) {
+            System.out.println(alumno);
+        }
     }
 
     private static void buscarAlumno() {
         //buscar por email
         System.out.print("Introduce el email del alumno: ");
         String email = scanner.next();
-        Alumno alumno = alumnoDAO.getAlumnos(email).getFirst();
+        Alumno alumno = alumnoDAO.getAlumnos(email).get(0);
         if(alumno == null) {
             System.out.println("No se ha encontrado ningún alumno con ese email");
         }
         else {
             System.out.println(alumno);
         }
-
     }
 
     private static void buscarProfesor() {
@@ -173,6 +169,7 @@ public class Principal {
         int edadMin = scanner.nextInt();
         System.out.print("Introduce la edad máxima del profesor: ");
         int edadMax = scanner.nextInt();
+        profesorDAO.getProfesores(edadMin, edadMax);
     }
 
     private static void actualizarProfesor() {
@@ -180,12 +177,13 @@ public class Principal {
         System.out.print("Introduce el email del profesor que quieres modificar: ");
         String email = scanner.next();
         System.out.print("Introduce la nueva calificacion: ");
-        int calification = scanner.nextInt();
+        int rating = scanner.nextInt();
+        profesorDAO.actualizarProfesor(email, rating);
+
     }
 
     private static void darBajaAlumnos() {
         System.out.println("Se darán de baja los alumnos con nota superior a 5.");
         alumnoDAO.borrarAlumnosNotaMinima();
     }
-
 }
